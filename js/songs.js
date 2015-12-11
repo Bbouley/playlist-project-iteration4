@@ -29,13 +29,12 @@ Song.prototype.appendToSongList = function(DOMelement){
 };
 
 Song.prototype.showAfterPlaylist = function(DOMelement, playlistIndex){
-  DOMelement.after('<div class = \'song showAfter' + playlistIndex +
-                    ' col-xs-2\'>' +
+  DOMelement.after('<div class = \'col-xs-2 song showAfter' + playlistIndex + '\' >' +
                     '<p><em>Artist :</em><br>' +
                     this.artist +
                     '<br><em>Song Title :</em><br> ' +
                     this.title +
                     '<br><em>Genre :</em><br>' +
                     this.genre +
-                    '</div>');
+                    '<div class = \'remove-songShowAfter col-xs-12\'>DELETE SONG</div></div>');
 };

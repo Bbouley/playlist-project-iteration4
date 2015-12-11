@@ -129,6 +129,18 @@ form{
   border-radius: 2px;
 }
 
+.remove-songShowAfter{
+  color:white;
+}
+
+.remove-songShowAfter:hover{
+  background-color: red;
+  color: black;
+  cursor: hand;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
 .songLink{
   color:white;
 }

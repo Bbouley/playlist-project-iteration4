@@ -4,7 +4,7 @@ songArray = [];
 playlist = {};
 firebaseArray = [];
 
-var myFirebaseRef = new Firebase("https://g11playlist.firebaseio.com/");
+// var myFirebaseRef = new Firebase("https://g11playlist.firebaseio.com/");
 
 //function that will randomly change colour of any song box with class .song
 function changeColour(){
@@ -296,6 +296,9 @@ $(document).ready (function(){
     //song to delete is thisSong, it's the song in songArray at given index, found above
     var thisSong = songArray[songArrayIndex];
     //loops through playlist array
+
+    if(confirm('Are you sure you want to delete this song?')){
+
     for (var i = 0; i < playlistArray.length; i++) {
       //for each playlist array loops through songs
       for (var j = 0; j <= playlistArray[i].songs.length; j++) {
@@ -326,9 +329,75 @@ $(document).ready (function(){
       for (var k = 0; k < songArray.length; k++) {
         songArray[k].appendToSongList($('#song-list'));
       }
+
+    }
   });
 
-});
+
+  $(document).on('click', '.remove-songShowAfter', function(){
+
+      event.preventDefault();
+      var classes = $(this).parent().attr('class').split(' ');
+      var showAfterClass = classes[2];
+      var classArray = ($('.'+showAfterClass+''));
+
+      var thisPlaylistIndex = parseInt(showAfterClass.replace(/\D/g,''));
+
+      var thisIndex = classArray.index($(this).parent());
+
+      var thisSong = playlistArray[thisPlaylistIndex].songs[thisIndex];
+
+      if(confirm('Are you sure you want to delete this song?')){
+
+      for (var i = 0; i < songArray.length; i++) {
+        if(songArray[i] === thisSong){
+          songArray.splice(i, 1);
+        }
+      }
+        $('#song-list').html('');
+
+      for (var k = 0; k < songArray.length; k++) {
+        songArray[k].appendToSongList($('#song-list'));
+      }
+
+      playlistArray[thisPlaylistIndex].songs.splice(thisIndex, 1);
+
+      $('.delete'+thisPlaylistIndex).remove();
+      classArray.remove();
+
+      thisSongsArray = playlistArray[thisPlaylistIndex].songs;
+        for (var m = thisSongsArray.length-1; m >= 0; m--) {
+          thisSongsArray[m].showAfterPlaylist(($('.playlist:eq(' + thisPlaylistIndex + ')')), thisPlaylistIndex);
+        }
+        ($('.playlist:eq(' + thisPlaylistIndex + ')').after('<div class = \'delete delete' +thisPlaylistIndex+ ' col-xs-2\'><h2>DELETE<br>THIS<br>PLAYLIST</h2><div>'));
+
+       }
+
+      });
+
+  });
+
+  $(document).on('click', '.songLinkShowAfter', function(){
+
+    event.preventDefault();
+    event.stopPropagation();
+
+      event.preventDefault();
+      var classes = $(this).parent().attr('class').split(' ');
+      var showAfterClass = classes[2];
+      var classArray = ($('.'+showAfterClass+''));
+
+      var thisPlaylistIndex = parseInt(showAfterClass.replace(/\D/g,''));
+
+      var thisIndex = classArray.index($(this).parent());
+
+      var thisSong = playlistArray[thisPlaylistIndex].songs[thisIndex];
+
+      var track_url = thisSong.link;
+          //embeds that song in the widget
+      SC.oEmbed(track_url, { auto_play: true, maxheight: 100}, document.getElementById('player'));
+
+  });
 
 //when window is closed, it for each playlist instance in array, it pushes the playlist to firebase, so it creates a new random child node of g11-playlist and saves playlist in there
  // $(window).unload(function(){
